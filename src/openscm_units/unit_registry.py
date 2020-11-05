@@ -341,6 +341,25 @@ class ScmUnitRegistry(pint.UnitRegistry):
         )
         self.add_context(_n2o_context)
 
+        _hfc410a_context = pint.Context("HFC410a_conversions")
+        _hfc410a_context = self._add_transformations_to_context(
+            _hfc410a_context,
+            "[HFC410a]",
+            self.HFC410a,
+            "[HFC32]",
+            self.HFC32,
+            0.5,
+        )
+        _hfc410a_context = self._add_transformations_to_context(
+            _hfc410a_context,
+            "[HFC410a]",
+            self.HFC410a,
+            "[HFC125]",
+            self.HFC125,
+            0.5,
+        )
+        self.add_context(_hfc410a_context)
+
         self._load_metric_conversions()
 
     def _load_metric_conversions(self):

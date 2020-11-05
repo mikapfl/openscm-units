@@ -179,12 +179,15 @@ def test_gwp_mixture(metric_names, mixture, constituents):
 
 
 @pytest.mark.parametrize("context,start_unit,end_unit,expected", (
-    ("HFC410A_conversions", "HFC32", "HFC410a", 0.5),
-    ("HFC410A_conversions", "HFC125", "HFC410a", 0.5),
+    ("HFC410a_conversions", "HFC410a", "HFC32", 0.5),
+    ("HFC410a_conversions", "HFC410a", "HFC125", 0.5),
+    # do we want to allow these reverse transformations?
+    ("HFC410a_conversions", "HFC32", "HFC410a", 2),
+    ("HFC410a_conversions", "HFC125", "HFC410a", 2),
 ))
 def test_context_gwp_mixture(context, start_unit, end_unit, expected):
     with unit_registry.context(context):
-        assert np.testing.assert_equal(1 * unit_registry(start_unit).to(end_unit).magnitude, expected)
+        np.testing.assert_equal((1 * unit_registry(start_unit)).to(end_unit).magnitude, expected)
 
 
 @pytest.mark.parametrize(
