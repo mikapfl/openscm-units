@@ -170,10 +170,21 @@ def test_gwp_mixture(metric_names, mixture, constituents):
             for fraction, species in constituents:
                 constituent_sum_gwp += (fraction * unit_registry(species)).to("CO2")
             mixture_gwp = unit_registry(mixture).to("CO2")
-            # rounding might be happening, therefore atol=0.6
+
             np.testing.assert_allclose(
-                constituent_sum_gwp.magnitude, mixture_gwp.magnitude, atol=0.6
+                constituent_sum_gwp.magnitude,
+                mixture_gwp.magnitude,
+                rtol=1e-3  # rounding of reported metric
             )
+
+
+@pytest.mark.parametrize("context,start_unit,end_unit,expected", (
+    ("HFC410A_conversions", "HFC32", "HFC410a", 0.5),
+    ("HFC410A_conversions", "HFC125", "HFC410a", 0.5),
+))
+def test_context_gwp_mixture(context, start_unit, end_unit, expected):
+    with unit_registry.context(context):
+        assert np.testing.assert_equal(1 * unit_registry(start_unit).to(end_unit).magnitude, expected)
 
 
 @pytest.mark.parametrize(
