@@ -174,20 +174,25 @@ def test_gwp_mixture(metric_names, mixture, constituents):
             np.testing.assert_allclose(
                 constituent_sum_gwp.magnitude,
                 mixture_gwp.magnitude,
-                rtol=1e-3  # rounding of reported metric
+                rtol=1e-3,  # rounding of reported metric
             )
 
 
-@pytest.mark.parametrize("context,start_unit,end_unit,expected", (
-    ("HFC410a_conversions", "HFC410a", "HFC32", 0.5),
-    ("HFC410a_conversions", "HFC410a", "HFC125", 0.5),
-    # do we want to allow these reverse transformations?
-    ("HFC410a_conversions", "HFC32", "HFC410a", 2),
-    ("HFC410a_conversions", "HFC125", "HFC410a", 2),
-))
+@pytest.mark.parametrize(
+    "context,start_unit,end_unit,expected",
+    (
+        ("HFC410a_conversions", "HFC410a", "HFC32", 0.5),
+        ("HFC410a_conversions", "HFC410a", "HFC125", 0.5),
+        # do we want to allow these reverse transformations?
+        ("HFC410a_conversions", "HFC32", "HFC410a", 2),
+        ("HFC410a_conversions", "HFC125", "HFC410a", 2),
+    ),
+)
 def test_context_gwp_mixture(context, start_unit, end_unit, expected):
     with unit_registry.context(context):
-        np.testing.assert_equal((1 * unit_registry(start_unit)).to(end_unit).magnitude, expected)
+        np.testing.assert_equal(
+            (1 * unit_registry(start_unit)).to(end_unit).magnitude, expected
+        )
 
 
 @pytest.mark.parametrize(
